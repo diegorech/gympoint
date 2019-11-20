@@ -1,27 +1,25 @@
-import express from 'express'
+import express from 'express';
 
-import routes from './routes'
+import routes from './routes';
 
-import './database'
+import './database';
+
 class App {
-    constructor(){
-        this.server = express()
-        this.server.listen(3333, () => console.log("Server On"))
+  constructor() {
+    this.server = express();
+    this.server.listen(3333, () => console.log('Server On'));
 
-        this.middlewares()
-        this.routes()
-    
-    }
+    this.middlewares();
+    this.routes();
+  }
 
-    middlewares() {
+  middlewares() {
+    this.server.use(express.json());
+  }
 
-        this.server.use(express.json())
-
-    }
-
-    routes() {
-        this.server.use(routes)
-    }
+  routes() {
+    this.server.use(routes);
+  }
 }
 
-export default new App().server
+export default new App().server;

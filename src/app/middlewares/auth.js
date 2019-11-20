@@ -1,35 +1,33 @@
-import jwt from 'jsonwebtoken'
-import authConfig from '../../authConfig'
+import jwt from 'jsonwebtoken';
+import authConfig from '../../authConfig';
 
- function  auth(req, res, next) {
-     
-    const { authorization } = req.headers 
-    const [, token] = authorization.split(' ')
-    
-    if(!authorization) { 
-            return res
-                    .status(400)
-                    .send('Access Denied! Token not found!')
-                    .json({ error: 'Access Denied! Token not found!'})
+function auth(req, res, next) {
+  const { authorization } = req.headers;
+  const [, token] = authorization.split(' ');
+
+  if (!authorization) {
+    return res
+      .status(400)
+      .send('Access Denied! Token not found!')
+      .json({ error: 'Access Denied! Token not found!' });
+  }
+
+  try {
+    const decoded = jwt.verify(token, authConfig.secret);
+    if (!decoded) {
+      res
+        .status(400)
+        .send('Access Denied! Token not found!')
+        .json({ error: 'Access Denied! Expired Token!' });
     }
-    
-    try {
-        const decoded = jwt.verify(token, authConfig.secret)
-        if( !decoded ) { 
-            res
-                .status(400)
-                .send('Access Denied! Token not found!')
-                .json({ error: 'Access Denied! Expired Token!'})
-        }
 
-        req.userId = decoded.id
-        next()
-
-    } catch(err) {
-        res
-            .status(400)
-            .send('Invalid Token')
-    }
+    req.userId = decoded.id;
+  } catch (err) {
+    res
+      .status(400)
+      .send('Invalid Token');
+  }
+  return next();
 }
 
-export default auth
+export default auth;
