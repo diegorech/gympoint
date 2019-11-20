@@ -10,3 +10,7 @@ module.exports = {
         underscoredAll: true,
     }
 }
+
+
+//fazer rota session para qnd logar receber um token JWT
+//apenas adms possuem senha
